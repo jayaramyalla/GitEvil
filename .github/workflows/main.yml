@@ -27,6 +27,8 @@ jobs:
           pwd && find .
       
       - name: Build the package
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python setup.py sdist bdist_wheel
         working-directory: ./markitanalysis  # Adjust if `setup.py` is in a subdirectory
