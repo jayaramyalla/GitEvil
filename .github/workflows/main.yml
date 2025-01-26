@@ -2,8 +2,8 @@ name: Publish to PyPI
 
 on:
   push:
-    tags:
-      - "v*"  # Trigger only on versioned tags
+    #tags:
+      #- "v*"  # Trigger only on versioned tags
 
 jobs:
   publish:
