@@ -72,7 +72,7 @@ class CustomInstallCommand(install):
 # Setup configuration
 setup(
     name="markitanalysis",
-    version="0.1.0",
+    version="0.0.1",
     packages=find_packages(),
     install_requires=[
         "requests",  # Add 'requests' as a dependency
