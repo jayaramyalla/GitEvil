@@ -72,7 +72,7 @@ class CustomInstallCommand(install):
 # Setup configuration
 setup(
     name="markitanalysis",
-    version="0.0.1",
+    version="0.0.2",
     packages=find_packages(),
     install_requires=[
         "requests",  # Add 'requests' as a dependency
@@ -87,8 +87,8 @@ setup(
     #long_description=open("README.md").read(),
     #long_description_content_type="text/markdown",
     author="Your Name",
-    author_email="your.email@example.com",
-    url="https://github.com/IHSMARKIT",
+    author_email="jayaram.bugs@gmail.com",
+    url="https://github.com/jayaramyalla/IHSMARKIT",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
