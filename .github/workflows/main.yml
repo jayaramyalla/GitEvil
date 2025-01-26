@@ -29,7 +29,7 @@ jobs:
       - name: Build the package
         run: |
           python setup.py sdist bdist_wheel
-        working-directory: ./  # Adjust if `setup.py` is in a subdirectory
+        working-directory: ./markitanalysis  # Adjust if `setup.py` is in a subdirectory
 
       - name: Publish to PyPI
         env:
@@ -37,4 +37,4 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
           twine upload dist/*
-        working-directory: ./  # Adjust if `dist` is in a subdirectory
+        working-directory: ./markitanalysis  # Adjust if `dist` is in a subdirectory
