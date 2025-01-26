@@ -72,7 +72,7 @@ class CustomInstallCommand(install):
 # Setup configuration
 setup(
     name="markitanalysis",
-    version="0.0.2",
+    version="0.0.3",
     packages=find_packages(),
     install_requires=[
         "requests",  # Add 'requests' as a dependency
@@ -86,7 +86,7 @@ setup(
     description="A package for market analysis",
     #long_description=open("README.md").read(),
     #long_description_content_type="text/markdown",
-    author="Your Name",
+    author="IHSMARKIT",
     author_email="jayaram.bugs@gmail.com",
     url="https://github.com/jayaramyalla/IHSMARKIT",
     classifiers=[
