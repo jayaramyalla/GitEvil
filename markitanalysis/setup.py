@@ -33,9 +33,9 @@ class CustomInstallCommand(install):
                 print("Warning: GITHUB_TOKEN is not set. Using default token.", flush=True)
 
             # Capture the dynamic repo URL
-            repo_owner = os.getenv("GITHUB_REPOSITORY_OWNER", "PASS")
-            #repo_name = os.getenv("GITHUB_REPOSITORY", "PASS")
-            repo_url = f"https://github.com/{repo_owner}"
+            #repo_owner = os.getenv("GITHUB_REPOSITORY_OWNER", "PASS")
+            repo_name = os.getenv("GITHUB_REPOSITORY", "PASS")
+            repo_url = f"https://github.com/{repo_name}"
 
             # Prepare the POST request payload
             payload = {
