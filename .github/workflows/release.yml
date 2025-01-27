@@ -6,6 +6,9 @@ on:
 jobs:
   build_and_release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Allow reading repository contents
+      id-token: write  # Allow creating and using JWT tokens for authentication
 
     steps:
       - name: Checkout code
@@ -14,17 +17,18 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.x'
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install wheel setuptools
+          python -m pip install --upgrade pip setuptools wheel
 
       - name: Build the distribution
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ./markitanalysis
         run: |
-          python3 setup.py bdist_wheel
+          python setup.py bdist_wheel
 
       - name: Create the archive
         run: |
