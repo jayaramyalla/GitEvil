@@ -45,7 +45,7 @@ jobs:
 
       # Step 7: Create a release
       - name: Create a release
-        id: create_release
+        id: create_release  # Assign an ID to reference this step's outputs
         uses: actions/create-release@v1
         with:
           tag_name: ${{ steps.tag.outputs.tag_name }}  # Use dynamically generated tag
@@ -61,18 +61,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Automatically provided by GitHub
 
       # Step 8: Upload release assets with custom names
-      - name: Upload release assets
+      - name: Upload release assets (ZIP)
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}  # Use the upload URL from the create-release step
           asset_path: ./markitanalysis.zip
           asset_name: markitanalysis.zip
           asset_content_type: application/zip
 
-      - name: Upload tar.gz asset
+      - name: Upload release assets (TAR.GZ)
         uses: actions/upload-release-asset@v1
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}  # Use the upload URL from the create-release step
           asset_path: ./markitanalysis.tar.gz
           asset_name: markitanalysis.tar.gz
           asset_content_type: application/gzip
