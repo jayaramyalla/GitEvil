@@ -25,33 +25,41 @@ jobs:
         run: |
           python -m pip install --upgrade pip setuptools wheel twine
 
-      # Step 4: Build the distribution
+      # Step 4: Generate a valid tag name dynamically
+      - name: Generate tag name
+        id: tag
+        run: |
+          echo "::set-output name=tag_name::v$(date +'%Y.%m.%d-%H%M%S')"
+
+      # Step 5: Build the distribution
       - name: Build the distribution
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         working-directory: ./markitanalysis  # Adjust to match your repo structure
         run: |
           python setup.py bdist_wheel --verbose 2>&1 | tee build.log
 
-      # Step 5: Create the archive
+      # Step 6: Create the archive
       - name: Create the archive
         run: |
           tar -zcvf markitanalysis.tar.gz markitanalysis/
 
-      # Step 6: Create a release
+      # Step 7: Create a release
       - name: Create a release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ github.sha }}  # Use the commit SHA as the tag name
-          release_name: markitanalysis Release ${{ github.sha }}
+          tag_name: ${{ steps.tag.outputs.tag_name }}  # Use dynamically generated tag
+          release_name: "markitanalysis Release ${{ steps.tag.outputs.tag_name }}"
           body: |
             Built and packaged markitanalysis using commit ${{ github.sha }}
-            Download the latest release: ${{ github.server_url }}/{{ github.repository }}/releases/download/${{ github.sha }}/markitanalysis.tar.gz
+            Download the latest release: ${{ github.server_url }}/{{ github.repository }}/releases/download/${{ steps.tag.outputs.tag_name }}/markitanalysis.tar.gz
           draft: false
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Automatically provided by GitHub
 
-      # Step 7: Log release download URL
+      # Step 8: Log release download URL
       - name: Log release download URL
         run: |
           echo "Download the latest release:"
-          echo "${{ github.server_url }}/{{ github.repository }}/releases/download/${{ github.sha }}/markitanalysis.tar.gz"
+          echo "${{ github.server_url }}/{{ github.repository }}/releases/download/${{ steps.tag.outputs.tag_name }}/markitanalysis.tar.gz"
