@@ -7,7 +7,7 @@ jobs:
   build_and_release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Allow repository access
+      contents: write  # Required to upload assets
 
     steps:
       # Step 1: Checkout the repository
@@ -18,7 +18,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12'  # Use Python 3.12
+          python-version: '3.12'
 
       # Step 3: Install dependencies
       - name: Install dependencies
@@ -36,6 +36,8 @@ jobs:
         working-directory: ./markitanalysis  # Adjust if setup.py is inside this directory
         run: |
           python setup.py bdist_wheel --verbose
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 6: Create the archive files
       - name: Create the archive files
@@ -68,6 +70,8 @@ jobs:
           asset_path: ./markitanalysis.zip
           asset_name: markitanalysis.zip
           asset_content_type: application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload release assets (TAR.GZ)
         uses: actions/upload-release-asset@v1
@@ -76,8 +80,12 @@ jobs:
           asset_path: ./markitanalysis.tar.gz
           asset_name: markitanalysis.tar.gz
           asset_content_type: application/gzip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 9: Remove default "Source code" assets
-      - name: Remove default "Source code" assets
+      # Step 9: Log release download URL
+      - name: Log release download URL
         run: |
-          echo "Custom assets uploaded. Default source code assets cannot be removed programmatically."
+          echo "Download the latest release:"
+          echo "${{ github.server_url }}/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag_name }}/markitanalysis.zip"
+          echo "${{ github.server_url }}/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag_name }}/markitanalysis.tar.gz"
