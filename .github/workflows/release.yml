@@ -28,7 +28,6 @@ jobs:
 
       - name: Create the archive
         run: |
-          cd ..
           pwd
           find .
           tar -zcvf ./markitanalysis.tar.gz ./markitanalysis/
