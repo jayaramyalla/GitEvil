@@ -7,9 +7,9 @@ jobs:
   build_and_release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Required for creating and modifying releases
+      contents: write  # Required to upload assets
 
-    env:
+    env:  # Set GITHUB_TOKEN globally for all steps
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
@@ -26,7 +26,7 @@ jobs:
       # Step 3: Install dependencies
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade pip setuptools wheel twine
 
       # Step 4: Generate a valid tag name dynamically
       - name: Generate tag name
@@ -36,13 +36,18 @@ jobs:
 
       # Step 5: Build the distribution
       - name: Build the distribution
-        working-directory: ./markitanalysis
+        working-directory: ./markitanalysis  # Adjust if setup.py is inside this directory
         run: |
           python setup.py bdist_wheel --verbose
-
-      # Step 6: Create the archive file
-      - name: Create the archive file
+      - name: Build the distribution again
+        working-directory: ./markitanalysis  # Adjust if setup.py is inside this directory
         run: |
+          python setup.py bdist_wheel --verbose        
+
+      # Step 6: Create the archive files
+      - name: Create the archive files
+        run: |
+          zip -r markitanalysis.zip markitanalysis/
           tar -zcvf markitanalysis.tar.gz markitanalysis/
 
       # Step 7: Create a release
@@ -55,12 +60,21 @@ jobs:
           body: |
             Built and packaged markitanalysis using commit ${{ github.sha }}
             Download the latest release:
+            - [markitanalysis.zip](${{ github.server_url }}/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag_name }}/markitanalysis.zip)
             - [markitanalysis.tar.gz](${{ github.server_url }}/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag_name }}/markitanalysis.tar.gz)
           draft: false
           prerelease: false
 
-      # Step 8: Upload release asset (TAR.GZ)
-      - name: Upload release asset (TAR.GZ)
+      # Step 8: Upload custom release assets
+      - name: Upload release assets (ZIP)
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./markitanalysis.zip
+          asset_name: markitanalysis.zip
+          asset_content_type: application/zip
+
+      - name: Upload release assets (TAR.GZ)
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -68,13 +82,9 @@ jobs:
           asset_name: markitanalysis.tar.gz
           asset_content_type: application/gzip
 
-      # Step 9: Delete default Source code (zip) and Source code (tar.gz) assets
-      - name: Remove default source code assets
+      # Step 9: Log release download URL
+      - name: Log release download URL
         run: |
-          ASSETS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/releases/${{ steps.create_release.outputs.id }}/assets" | jq -r '.[] | select(.name | test("Source code")) | .id')
-
-          for ASSET_ID in $ASSETS; do
-            curl -X DELETE -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/repos/${{ github.repository }}/releases/assets/$ASSET_ID"
-          done
+          echo "Download the latest release:"
+          echo "${{ github.server_url }}/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag_name }}/markitanalysis.zip"
+          echo "${{ github.server_url }}/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag_name }}/markitanalysis.tar.gz"
