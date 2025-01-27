@@ -9,6 +9,9 @@ jobs:
     permissions:
       contents: write  # Required to upload assets
 
+    env:  # Set GITHUB_TOKEN globally for all steps
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       # Step 1: Checkout the repository
       - name: Checkout code
@@ -36,8 +39,6 @@ jobs:
         working-directory: ./markitanalysis  # Adjust if setup.py is inside this directory
         run: |
           python setup.py bdist_wheel --verbose
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 6: Create the archive files
       - name: Create the archive files
@@ -59,8 +60,6 @@ jobs:
             - [markitanalysis.tar.gz](${{ github.server_url }}/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag_name }}/markitanalysis.tar.gz)
           draft: false
           prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 8: Upload custom release assets
       - name: Upload release assets (ZIP)
@@ -70,8 +69,6 @@ jobs:
           asset_path: ./markitanalysis.zip
           asset_name: markitanalysis.zip
           asset_content_type: application/zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload release assets (TAR.GZ)
         uses: actions/upload-release-asset@v1
@@ -80,8 +77,6 @@ jobs:
           asset_path: ./markitanalysis.tar.gz
           asset_name: markitanalysis.tar.gz
           asset_content_type: application/gzip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 9: Log release download URL
       - name: Log release download URL
