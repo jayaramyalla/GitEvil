@@ -1,0 +1,46 @@
+name: Build and Release markitanalysis
+
+on:
+  workflow_dispatch:
+  #push:
+    #branches: [ main ]
+
+jobs:
+  build_and_release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install wheel
+
+      - name: Build the distribution
+        working-directory: ./markitanalysis
+        run: python3 setup.py bdist_wheel
+
+      - name: Create the archive
+        run: |
+          cd ..
+          tar -zcvf markitanalysis.tar.gz markitanalysis/
+
+      - name: Create a release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.sha }}
+          release_name: markitanalysis Release ${{ github.sha }}
+          body: |
+            Built and packaged markitanalysis using commit ${{ github.sha }}
+            Download the latest release: ${{ github.server_url }}/releases/download/${{ github.sha }}/markitanalysis.tar.gz
+          draft: false
+          prerelease: false
+
+      - name: Log release download URL
+        run: |
+          echo "Download the latest release:"
+          echo "${{ github.server_url }}/releases/download/${{ github.sha }}/markitanalysis.tar.gz"
