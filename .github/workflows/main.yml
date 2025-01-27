@@ -1,7 +1,8 @@
 name: Publish to PyPI
 
 on:
-  push:
+  workflow_dispatch:
+  #push:
     #tags:
       #- "v*"  # Trigger only on versioned tags
 
@@ -33,10 +34,10 @@ jobs:
           python setup.py sdist bdist_wheel
         working-directory: ./markitanalysis  # Adjust if `setup.py` is in a subdirectory
 
-      - name: Publish to PyPI
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: |
-          pwd && find . && twine upload --verbose dist/*
-        working-directory: ./markitanalysis  # Adjust if `dist` is in a subdirectory
+#      - name: Publish to PyPI
+#        env:
+#          TWINE_USERNAME: __token__
+#          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+#        run: |
+#          pwd && find . && twine upload --verbose dist/*
+#        working-directory: ./markitanalysis  # Adjust if `dist` is in a subdirectory
