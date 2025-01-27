@@ -5,25 +5,3 @@
 
 ### once the both modules are installed then use the as below
 - ```pip3 install markitanalysis```
-
-
-Updated on: 2025-01-27 16:44:46
-Host: jaxor
-
-Updated on: 2025-01-27 17:17:01
-Host: jaxor
-
-Updated on: 2025-01-27 17:21:06
-Host: jaxor
-
-Updated on: 2025-01-27 17:32:19
-Host: jaxor
-
-Updated on: 2025-01-27 17:32:26
-Host: jaxor
-
-Updated on: 2025-01-27 17:34:15
-Host: jaxor
-
-Updated on: 2025-01-27 17:34:32
-Host: jaxor
