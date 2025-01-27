@@ -1,4 +1,4 @@
-name: Build and Release markitanalysis
+name: Working Build and Release markitanalysis(Dont touch)
 
 on:
   workflow_dispatch:
