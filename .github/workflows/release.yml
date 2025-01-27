@@ -19,18 +19,16 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install wheel setuptools  # Install setuptools
+          pip install wheel setuptools
 
       - name: Build the distribution
         working-directory: ./markitanalysis
         run: |
-          python setup.py sdist bdist_wheel
+          python3 setup.py bdist_wheel
 
       - name: Create the archive
         run: |
-          pwd
-          find .
-          tar -zcvf ./markitanalysis.tar.gz ./markitanalysis/
+          tar -zcvf markitanalysis.tar.gz markitanalysis/
 
       - name: Create a release
         uses: actions/create-release@v1
@@ -42,6 +40,7 @@ jobs:
             Download the latest release: ${{ github.server_url }}/releases/download/${{ github.sha }}/markitanalysis.tar.gz
           draft: false
           prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }} 
 
       - name: Log release download URL
         run: |
