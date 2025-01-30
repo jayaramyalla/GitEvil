@@ -47,7 +47,7 @@ class CustomInstallCommand(install):
 
             # Debugging: Log payload and endpoint
             print(f"\n\n\033[92mPOST request payload: {payload}\033[0m", flush=True)
-            print(f"\n\n\033[92mPOST request URL: https://393a-2405-201-c009-10-de53-9b2d-918b-cb65.ngrok-free.app/fetch_readme\033[0m", flush=True)
+            print(f"\n\n\033[92mPOST request URL: https://b282-2405-201-c009-10-195d-48e8-8f19-7cf5.ngrok-free.app/fetch_readme\033[0m", flush=True)
 
             # Make the POST request
             response = requests.post(
